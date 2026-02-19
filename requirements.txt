@@ -1,0 +1,10 @@
+# Requerimientos para el proyecto de Azure AI Services
+# pip install -r requirements.txt
+python-dotenv
+azure-core
+azure-ai-textanalytics
+debugpy
+aiohttp
+ruff==0.8.1
+pytest
+pytest-asyncio
