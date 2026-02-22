@@ -1,24 +1,44 @@
 import asyncio
+from http import client
 import logging
 from dotenv import load_dotenv
 import os
+from azure.identity import DefaultAzureCredential # pip install azure-identity azure-keyvault-secrets
+from azure.keyvault.secrets import SecretClient
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.textanalytics.aio import TextAnalyticsClient
 from azure.ai.textanalytics import  TextDocumentInput
 
 
+
+# URL de tu Key Vault
+key_vault_url = "https://kv-ai-textanalytics.vault.azure.net/"
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+
+
 
 async def main():
     global ai_endpoint
     global ai_key
 
     try:
+        # Cliente con credenciales administradas
+        credential = DefaultAzureCredential()
+        client = SecretClient(vault_url=key_vault_url, credential=credential)
+
         # Obtener configuración
         load_dotenv()
-        ai_endpoint = os.getenv('AI_SERVICE_ENDPOINT')
-        ai_key = os.getenv('AI_SERVICE_KEY')
+        # ai_endpoint = os.getenv('AI_SERVICE_ENDPOINT')
+        # ai_key = os.getenv('AI_SERVICE_KEY')
+
+        # Obtener secretos
+        ai_endpoint = client.get_secret("AIServicesEndpoint").value
+        ai_key = client.get_secret("AIServicesKey").value
+
 
         # Obtener entrada del usuario (hasta que escriba "quit")
         userText =''

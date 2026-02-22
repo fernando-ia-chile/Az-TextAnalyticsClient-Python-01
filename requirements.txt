@@ -8,3 +8,5 @@ aiohttp
 ruff==0.8.1
 pytest
 pytest-asyncio
+azure-identity
+azure-keyvault-secrets
